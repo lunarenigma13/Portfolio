@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Automatic Sketching Machine — Smriti Gurung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0b0c10;
+    --surface: #13141a;
+    --surface2: #1c1d26;
+    --border: rgba(255,255,255,0.07);
+    --accent: #7fffd4;
+    --accent2: #c084fc;
+    --text: #e8e6f0;
+    --muted: #8b8a9e;
+    --heading: #f5f3ff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(rgba(127,255,212,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(127,255,212,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(11,12,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-logo:hover { color: #a8ffe8; }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .project-hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    padding-top: 5rem;
+  }
+
+  .project-header {
+    margin-bottom: 3rem;
+  }
+
+  .project-icon-large {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--heading);
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+  }
+
+  .project-meta {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .meta-value {
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .project-content {
+    padding: 3rem 0;
+  }
+
+  .content-section {
+    margin-bottom: 3rem;
+  }
+
+  .content-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .content-section p {
+    color: var(--muted);
+    margin-bottom: 1rem;
+    line-height: 1.8;
+  }
+
+  .tags-section {
+    margin-top: 2rem;
+  }
+
+  .tags-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  .tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.4rem 1rem;
+    border-radius: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    transition: all 0.2s;
+  }
+
+  .tag:hover { border-color: var(--accent); background: rgba(127,255,212,0.08); }
+
+  .nav-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    margin-top: 2rem;
+  }
+
+  .nav-back:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+    margin-top: 4rem;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .project-hero { padding-top: 6rem; }
+    .project-meta { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="smriti_portfolio.html" class="nav-logo">SG.</a>
+  <ul class="nav-links">
+    <li><a href="smriti_portfolio.html#about">About</a></li>
+    <li><a href="smriti_portfolio.html#experience">Experience</a></li>
+    <li><a href="smriti_portfolio.html#projects">Projects</a></li>
+    <li><a href="smriti_portfolio.html#certifications">Certifications</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- PROJECT HERO -->
+<section class="project-hero">
+  <div class="container">
+    <div class="project-header">
+      <div class="project-icon-large">✏️</div>
+      <h1>Automatic Sketching Machine</h1>
+      
+      <div class="project-meta">
+        <div class="meta-item">
+          <span class="meta-label">Timeline</span>
+          <span class="meta-value">Jul – Aug 2023</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Type</span>
+          <span class="meta-value">Mechanical Project</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT CONTENT -->
+<section class="project-content">
+  <div class="container">
+    <div class="content-section">
+      <h2>Overview</h2>
+      <p>An innovative Arduino-driven machine that automatically converts digital portrait images into hand-drawn sketches. The machine uses a sophisticated motor control system with a belt and pulley mechanism for precise 2D pen-plotting, creating impressive portrait reproductions from photographs.</p>
+    </div>
+
+    <div class="content-section">
+      <h2>Key Features</h2>
+      <p>• Automatic portrait generation from digital images</p>
+      <p>• Precise 2D positioning using stepper motors and belt drive</p>
+      <p>• Servo-controlled pen lift mechanism for line drawing</p>
+      <p>• Arduino-based motion control and coordination</p>
+      <p>• Calibrated speed and positioning for accurate output</p>
+    </div>
+
+    <div class="content-section">
+      <h2>Technical Architecture</h2>
+      <p><strong>Mechanical Design:</strong> The machine features a XY-axis belt drive system with stepper motors providing precise positioning. A servo motor controls the pen height, enabling lifting between line segments.</p>
+      <p><strong>Image Processing:</strong> Images are converted to sketch format using edge detection algorithms, creating a vector representation of pen movements.</p>
+      <p><strong>Motion Control:</strong> Arduino firmware coordinates motor movements, timing pen lifts, and ensuring smooth drawing motion across the canvas.</p>
+    </div>
+
+    <div class="content-section">
+      <h2>Project Highlights</h2>
+      <p>This project demonstrated the intersection of mechanical engineering, electronics, and programming. Successfully created realistic portrait sketches, showcasing the potential of automated art creation. Selected as project demonstrator for college showcase.</p>
+
+      <div class="tags-section">
+        <span class="tags-label">Technologies Used</span>
+        <div class="tags-grid">
+          <span class="tag">Arduino</span>
+          <span class="tag">Motor Control</span>
+          <span class="tag">Belt System</span>
+          <span class="tag">Stepper Motors</span>
+          <span class="tag">Servo Motors</span>
+          <span class="tag">C/C++</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <a href="smriti_portfolio.html#projects" class="nav-back">← Back to Projects</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span style="font-family:'DM Mono',monospace;">© <span id="year">2025</span> Smriti Gurung</span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

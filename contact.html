@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — Smriti Gurung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0b0c10;
+    --surface: #13141a;
+    --surface2: #1c1d26;
+    --border: rgba(255,255,255,0.07);
+    --accent: #7fffd4;
+    --accent2: #c084fc;
+    --text: #e8e6f0;
+    --muted: #8b8a9e;
+    --heading: #f5f3ff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(rgba(127,255,212,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(127,255,212,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(11,12,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-logo:hover { color: #a8ffe8; }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .contact-hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 5rem;
+  }
+
+  .contact-content {
+    text-align: center;
+    width: 100%;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-tag::after {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--heading);
+    letter-spacing: -2px;
+    margin-bottom: 2rem;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .intro-text {
+    color: var(--muted);
+    font-size: 1.15rem;
+    line-height: 1.8;
+    max-width: 700px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .contact-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .contact-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 2.5rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .contact-card:hover { 
+    border-color: rgba(127,255,212,0.2);
+    transform: translateY(-4px);
+  }
+  .contact-card:hover::after { transform: scaleX(1); }
+
+  .contact-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .contact-method-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 0.8rem;
+  }
+
+  .contact-value {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+    word-break: break-all;
+  }
+
+  .contact-link {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    background: var(--accent);
+    color: #0b0c10;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover {
+    background: #a8ffe8;
+    transform: translateY(-2px);
+  }
+
+  .social-section {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .social-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 1.5rem;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .social-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    margin-top: 2rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--accent); }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+    margin-top: 4rem;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.2s; }
+  .fade-up:nth-child(3) { animation-delay: 0.3s; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .contact-hero { padding-top: 6rem; }
+    .contact-methods { grid-template-columns: 1fr; gap: 1.5rem; }
+    .contact-card { padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="smriti_portfolio.html" class="nav-logo">SG.</a>
+  <ul class="nav-links">
+    <li><a href="smriti_portfolio.html#about">About</a></li>
+    <li><a href="smriti_portfolio.html#experience">Experience</a></li>
+    <li><a href="smriti_portfolio.html#projects">Projects</a></li>
+    <li><a href="smriti_portfolio.html#certifications">Certifications</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- CONTACT SECTION -->
+<section class="contact-hero">
+  <div class="container">
+    <div class="contact-content">
+      <div class="hero-tag fade-up">Get In Touch</div>
+      <h1 class="fade-up">Let's <span>Connect</span></h1>
+      <p class="intro-text fade-up">I'm always interested in hearing about new projects and opportunities. Whether you want to collaborate, have a question, or just want to say hello, feel free to reach out!</p>
+
+      <div class="contact-methods">
+        <div class="contact-card fade-up">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-method-title">Email</div>
+          <div class="contact-value">smritigurung002@gmail.com</div>
+          <a href="mailto:smritigurung002@gmail.com" class="contact-link">Send Email</a>
+        </div>
+
+        <div class="contact-card fade-up">
+          <div class="contact-icon">💼</div>
+          <div class="contact-method-title">LinkedIn</div>
+          <div class="contact-value">Connect with me professionally</div>
+          <a href="https://www.linkedin.com/in/smriti-gurung-305a92315/" target="_blank" class="contact-link">View Profile</a>
+        </div>
+
+        <div class="contact-card fade-up">
+          <div class="contact-icon">🐙</div>
+          <div class="contact-method-title">GitHub</div>
+          <div class="contact-value">Check out my projects</div>
+          <a href="https://github.com/lunarenigma13" target="_blank" class="contact-link">Visit GitHub</a>
+        </div>
+
+        <div class="contact-card fade-up">
+          <div class="contact-icon">📱</div>
+          <div class="contact-method-title">Phone</div>
+          <div class="contact-value">+977-9810052611</div>
+          <a href="tel:+977-9810052611" class="contact-link">Call Me</a>
+        </div>
+      </div>
+
+      <div class="social-section">
+        <h2 class="social-title">More Ways to Connect</h2>
+        <div class="social-links">
+          <a href="mailto:smritigurung002@gmail.com" class="social-link">
+            📧 Email me
+          </a>
+          <a href="tel:+977-9810052611" class="social-link">
+            📱 +977-9810052611
+          </a>
+          <a href="https://www.linkedin.com/in/smriti-gurung-305a92315/" target="_blank" class="social-link">
+            in LinkedIn
+          </a>
+          <a href="https://github.com/lunarenigma13" target="_blank" class="social-link">
+            🐙 GitHub
+          </a>
+        </div>
+      </div>
+
+      <a href="smriti_portfolio.html" class="back-link">← Back to Portfolio</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span style="font-family:'DM Mono',monospace;">© <span id="year">2025</span> Smriti Gurung</span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
